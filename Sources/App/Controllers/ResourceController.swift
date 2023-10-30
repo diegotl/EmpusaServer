@@ -1,7 +1,9 @@
 import Vapor
+import OSLog
 
 final class ResourceController: RouteCollection {
     private var cachedResponse: CachedResponse<[CategoryData]>?
+    private let logger = Logger(subsystem: "nl.trevisa.diego.EmpusaServer", category: "ResourceController")
 
     func boot(routes: RoutesBuilder) throws {
         let routes = routes
@@ -16,6 +18,8 @@ final class ResourceController: RouteCollection {
         if let cachedResponse, cachedResponse.isValid {
             return cachedResponse.response
         }
+
+        logger.info("Refetching data because cache is invalid")
 
         var response = [CategoryData]()
 
@@ -36,7 +40,8 @@ final class ResourceController: RouteCollection {
                             .content
                             .decode([RepositoryRelease].self, as: .json)
                     } catch {
-                        return cachedResponse?.response ?? []
+                        logger.error("Failed to fetch release for \(resource.rawValue): \(error.localizedDescription)")
+                        continue
                     }
 
                     let stableRelease = ReleaseData(
@@ -101,7 +106,10 @@ final class ResourceController: RouteCollection {
             let cacheData = Data(buffer: cacheFile)
             cachedResponse = try JSONDecoder()
                 .decode(CachedResponse<[CategoryData]>.self, from: cacheData)
-        } catch {}
+            logger.info("Cache initialized from cache.json")
+        } catch {
+            logger.error("Failed to init cache: \(error.localizedDescription)")
+        }
     }
 
     private func persistCache(_ req: Request) async {
@@ -113,6 +121,8 @@ final class ResourceController: RouteCollection {
                 ByteBuffer(data: data),
                 at: "Resources/cache.json"
             )
-        } catch {}
+        } catch {
+            logger.error("Failed to persist cache to: \(error.localizedDescription)")
+        }
     }
 }
