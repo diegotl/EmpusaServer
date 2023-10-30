@@ -3,7 +3,6 @@ import OSLog
 
 final class ResourceController: RouteCollection {
     private var cachedResponse: CachedResponse<[CategoryData]>?
-    private let logger = Logger(subsystem: "nl.trevisa.diego.EmpusaServer", category: "ResourceController")
 
     func boot(routes: RoutesBuilder) throws {
         let routes = routes
@@ -19,7 +18,7 @@ final class ResourceController: RouteCollection {
             return cachedResponse.response
         }
 
-        logger.info("Refetching data because cache is invalid")
+        req.logger.info("Refetching data because cache is invalid")
 
         var response = [CategoryData]()
 
@@ -40,7 +39,7 @@ final class ResourceController: RouteCollection {
                             .content
                             .decode([RepositoryRelease].self, as: .json)
                     } catch {
-                        logger.error("Failed to fetch release for \(resource.rawValue): \(error.localizedDescription)")
+                        req.logger.error("Failed to fetch release for \(resource.rawValue): \(error.localizedDescription)")
                         continue
                     }
 
@@ -106,9 +105,9 @@ final class ResourceController: RouteCollection {
             let cacheData = Data(buffer: cacheFile)
             cachedResponse = try JSONDecoder()
                 .decode(CachedResponse<[CategoryData]>.self, from: cacheData)
-            logger.info("Cache initialized from cache.json")
+            req.logger.info("Cache initialized from cache.json")
         } catch {
-            logger.error("Failed to init cache: \(error.localizedDescription)")
+            req.logger.error("Failed to init cache: \(error.localizedDescription)")
         }
     }
 
@@ -122,7 +121,7 @@ final class ResourceController: RouteCollection {
                 at: "Resources/cache.json"
             )
         } catch {
-            logger.error("Failed to persist cache to: \(error.localizedDescription)")
+            req.logger.error("Failed to persist cache to: \(error.localizedDescription)")
         }
     }
 }
