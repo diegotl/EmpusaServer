@@ -61,7 +61,7 @@ final class ResourceController: RouteCollection {
                     categoryData.resources.append(
                         .init(
                             name: resource.rawValue,
-                            diplayName: resource.displayName,
+                            displayName: resource.displayName,
                             additionalDescription: resource.additionalDescription,
                             stableRelease: stableRelease,
                             preRelease: preRelease
@@ -72,7 +72,7 @@ final class ResourceController: RouteCollection {
                     categoryData.resources.append(
                         .init(
                             name: resource.rawValue,
-                            diplayName: resource.displayName,
+                            displayName: resource.displayName,
                             additionalDescription: resource.additionalDescription,
                             stableRelease: .init(
                                 resource: resource,
