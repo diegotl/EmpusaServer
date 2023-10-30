@@ -1,5 +1,4 @@
 import Vapor
-import OSLog
 
 final class ResourceController: RouteCollection {
     private var cachedResponse: CachedResponse<[CategoryData]>?
