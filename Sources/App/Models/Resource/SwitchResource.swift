@@ -1,4 +1,4 @@
-import Vapor
+import Foundation
 
 // MARK: - SwitchResourceSource
 
@@ -21,32 +21,65 @@ public enum SwitchResouceSource {
 
 // MARK: - SwitchResource
 
+enum SwitchResourceCategory: CaseIterable {
+    case core
+    case gaming
+    case tools
+    case customization
+
+    var displayName: String {
+        switch self {
+        case .core:
+            "Core"
+        case .gaming:
+            "Gaming Tools"
+        case .tools:
+            "Productivity Tools"
+        case .customization:
+            "Customization"
+        }
+    }
+
+    var resources: [SwitchResource] {
+        switch self {
+        case .core:
+            [.hekate, .hekateIPL, .atmosphere, .fusee, .sigpatches, .bootLogos, .emummc]
+        case .gaming:
+            [.tinfoil, .missionControl, .awooInstaller, .tinwooInstaller]
+        case .tools:
+            [.lockpickRCM, .hbAppStore, .jksv, .ftpd, .nxShell, .goldleaf, .linkalho, .nxGallery, .nxActivityLog, .nxOvlloader, .teslaMenu, .ovlSysmodules, .sysClk]
+        case .customization:
+            [.nxThemesInstaller]
+        }
+    }
+}
+
 enum SwitchResource: String, CaseIterable {
     case hekate
     case hekateIPL
     case atmosphere
     case fusee
     case sigpatches
-    case tinfoil
     case bootLogos
     case emummc
+    case tinfoil
+    case awooInstaller
+    case tinwooInstaller
     case lockpickRCM
     case hbAppStore
     case jksv
     case ftpd
-    case nxThemesInstaller
     case nxShell
     case goldleaf
-    case awooInstaller
-    case tinwooInstaller
-    case missionControl
+    case linkalho
     case nxGallery
     case nxActivityLog
+    case nxThemesInstaller
+    case missionControl
     case nxOvlloader
     case teslaMenu
     case ovlSysmodules
     case sysClk
-    case linkalho
 }
 
 extension SwitchResource {
