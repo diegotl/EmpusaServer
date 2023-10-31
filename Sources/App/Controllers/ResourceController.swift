@@ -48,7 +48,7 @@ final class ResourceController: RouteCollection {
                         release: releases.first(where: { !$0.prerelease })
                     )
 
-                    let preRelease = ReleaseData(
+                    var preRelease = ReleaseData(
                         resource: resource,
                         assetPrefix: assetPrefix,
                         release: releases.first(where: { $0.prerelease })
@@ -56,6 +56,14 @@ final class ResourceController: RouteCollection {
 
                     guard let stableRelease else {
                         continue
+                    }
+
+                    if
+                        let stableVersion = stableRelease.version,
+                        let preReleaseVersion = preRelease?.version,
+                        stableVersion.isHigherThan(preReleaseVersion)
+                    {
+                        preRelease = nil
                     }
 
                     categoryData.resources.append(
