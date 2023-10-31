@@ -303,69 +303,57 @@ extension SwitchResource {
         }
     }
 
-    var isAssetZipped: Bool {
-        switch self {
-        case .hekateIPL, .emummc, .lockpickRCM, .hbAppStore,
-             .fusee, .jksv, .ftpd, .nxThemesInstaller,
-             .nxShell, .goldleaf, .nxActivityLog,
-             .ovlSysmodules:
-            false
-        default:
-            true
-        }
-    }
-
     var installSteps: [InstallStep] {
         switch self {
         case .hekate, .bootLogos:
             [
-                .merge(from: "bootloader", to: "bootloader")
+                .mergeDir(from: "bootloader", to: "bootloader")
             ]
 
         case .emummc:
             [
-                .move(from: "emummc.txt", to: "atmosphere/hosts/")
+                .moveFile(from: assetFileName, to: "atmosphere/hosts/")
             ]
 
         case .atmosphere, .sigpatches, .tinfoil,
              .awooInstaller, .tinwooInstaller, .missionControl,
              .nxGallery, .nxOvlloader, .teslaMenu:
             [
-                .merge(from: "", to: "")
+                .mergeAll()
             ]
 
         case .hekateIPL:
             [
-                .move(from: "", to: "bootloader")
+                .moveFile(from: assetFileName, to: "bootloader")
             ]
 
         case .lockpickRCM, .fusee:
             [
-                .move(from: "", to: "bootloader/payloads")
+                .moveFile(from: assetFileName, to: "bootloader/payloads")
             ]
 
         case .hbAppStore, .jksv, .ftpd,
               .nxThemesInstaller, .nxShell, .goldleaf,
               .nxActivityLog:
             [
-                .move(from: "", to: "switch")
+                .moveFile(from: assetFileName, to: "switch")
             ]
 
         case .ovlSysmodules:
             [
-                .move(from: "ovlSysmodules.ovl", to: "switch/.overlays")
+                .moveFile(from: assetFileName, to: "switch/.overlays")
             ]
 
         case .sysClk:
             [
-                .merge(from: "atmosphere", to: "atmosphere"),
-                .merge(from: "switch", to: "switch"),
-                .merge(from: "config", to: "config"),
+                .mergeDir(from: "atmosphere", to: "atmosphere"),
+                .mergeDir(from: "switch", to: "switch"),
+                .mergeDir(from: "config", to: "config"),
             ]
 
         case .linkalho:
             [
-                .move(from: "linkalho.nro", to: "switch")
+                .moveFile(from: "linkalho.nro", to: "switch")
             ]
         }
     }

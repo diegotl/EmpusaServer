@@ -2,25 +2,34 @@ import Vapor
 
 struct InstallStep: Content {
     enum Operation: String, Content {
-        case merge
-        case move
+        case mergeAll
+        case mergeDir
+        case moveFile
     }
 
     let operation: Operation
-    let origin: String
-    let destination: String
+    let origin: String?
+    let destination: String?
 
-    static func merge(from origin: String, to destination: String) -> InstallStep {
+    static func mergeAll() -> InstallStep {
         .init(
-            operation: .merge,
+            operation: .mergeAll,
+            origin: nil,
+            destination: nil
+        )
+    }
+
+    static func mergeDir(from origin: String, to destination: String) -> InstallStep {
+        .init(
+            operation: .mergeDir,
             origin: origin,
             destination: destination
         )
     }
 
-    static func move(from origin: String, to destination: String) -> InstallStep {
+    static func moveFile(from origin: String, to destination: String) -> InstallStep {
         .init(
-            operation: .move,
+            operation: .moveFile,
             origin: origin,
             destination: destination
         )

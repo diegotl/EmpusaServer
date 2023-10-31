@@ -4,14 +4,12 @@ struct ReleaseData: Content {
     let version: String?
     let assetUrl: URL
     let assetFileName: String
-    let isZipped: Bool
     let installSteps: [InstallStep]
 
     enum CodingKeys: String, CodingKey {
         case version
         case assetUrl = "asset_url"
         case assetFileName = "asset_filename"
-        case isZipped = "is_zipped"
         case installSteps = "install_steps"
     }
 
@@ -23,7 +21,6 @@ struct ReleaseData: Content {
         self.version = version
         self.assetUrl = assetUrl
         self.assetFileName = resource.assetFileName
-        self.isZipped = resource.isAssetZipped
         self.installSteps = resource.installSteps
     }
 
@@ -42,7 +39,6 @@ struct ReleaseData: Content {
         version = release.tagName
         assetUrl = asset.browserDownloadUrl
         assetFileName = resource.assetFileName
-        isZipped = resource.isAssetZipped
         installSteps = resource.installSteps
     }
 }
