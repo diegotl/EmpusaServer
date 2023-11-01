@@ -33,10 +33,13 @@ final class ResourceController: RouteCollection {
 
                     var releases: [RepositoryRelease]
                     do {
+                        let decoder = JSONDecoder()
+                        decoder.dateDecodingStrategy = .iso8601
+
                         releases = try await req.client
                             .get(uri, headers: headers)
                             .content
-                            .decode([RepositoryRelease].self, as: .json)
+                            .decode([RepositoryRelease].self, using: decoder)
                     } catch {
                         req.logger.error("Failed to fetch release for \(resource.rawValue): \(error.localizedDescription)")
                         continue
