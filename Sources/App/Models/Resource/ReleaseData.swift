@@ -1,12 +1,14 @@
 import Vapor
 
 struct ReleaseData: Content {
+    let createdAt: Date?
     let version: String?
     let assetUrl: URL
     let assetFileName: String
     let installSteps: [InstallStep]
 
     enum CodingKeys: String, CodingKey {
+        case createdAt = "created_at"
         case version
         case assetUrl = "asset_url"
         case assetFileName = "asset_filename"
@@ -18,6 +20,7 @@ struct ReleaseData: Content {
         version: String? = nil,
         assetUrl: URL
     ) {
+        self.createdAt = nil
         self.version = version
         self.assetUrl = assetUrl
         self.assetFileName = resource.assetFileName
@@ -36,6 +39,7 @@ struct ReleaseData: Content {
             return nil
         }
 
+        createdAt = release.createdAt
         version = release.tagName
         assetUrl = asset.browserDownloadUrl
         assetFileName = resource.assetFileName

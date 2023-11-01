@@ -58,11 +58,7 @@ final class ResourceController: RouteCollection {
                         continue
                     }
 
-                    if
-                        let stableVersion = stableRelease.version,
-                        let preReleaseVersion = preRelease?.version,
-                        stableVersion.isHigherThan(preReleaseVersion)
-                    {
+                    if stableRelease.createdAt ?? .distantFuture > preRelease?.createdAt ?? .distantPast {
                         preRelease = nil
                     }
 
