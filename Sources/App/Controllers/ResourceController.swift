@@ -39,7 +39,11 @@ final class ResourceController: RouteCollection {
                             .decode([RepositoryRelease].self, as: .json)
                     } catch {
                         req.logger.error("Failed to fetch release for \(resource.rawValue): \(error.localizedDescription)")
-                        continue
+                        if let cachedResponse {
+			    return cachedResponse.response
+			} else {
+			    continue
+			}
                     }
 
                     let stableRelease = ReleaseData(
