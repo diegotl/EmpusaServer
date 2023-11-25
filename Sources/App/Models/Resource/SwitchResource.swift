@@ -23,15 +23,15 @@ public enum SwitchResouceSource {
 
 enum SwitchResourceCategory: CaseIterable {
     case core
-    case gaming
+    case gameTools
     case tools
     case customization
 
     var displayName: String {
         switch self {
         case .core:
-            "Core"
-        case .gaming:
+            "Bootloader & CFW Stuff"
+        case .gameTools:
             "Gaming Tools"
         case .tools:
             "Productivity Tools"
@@ -43,13 +43,13 @@ enum SwitchResourceCategory: CaseIterable {
     var resources: [SwitchResource] {
         switch self {
         case .core:
-            [.hekate, .hekateIPL, .atmosphere, .fusee, .sigpatches, .bootLogos, .emummc]
-        case .gaming:
-            [.tinfoil, .missionControl, .awooInstaller, .tinwooInstaller]
+            [.hekate, .atmosphere, .hekateIPL, .sigpatches, .fusee, .emummc, .picoflyToolbox, .hwflyToolbox]
+        case .gameTools:
+            [.tinfoil, .jksv, .missionControl, .awooInstaller, .tinwooInstaller, .dbi]
         case .tools:
-            [.lockpickRCM, .hbAppStore, .jksv, .ftpd, .nxShell, .goldleaf, .linkalho, .nxGallery, .nxActivityLog, .nxOvlloader, .teslaMenu, .ovlSysmodules, .sysClk]
+            [.lockpickRCM, .hbAppStore, .ftpd, .nxShell, .goldleaf, .linkalho, .nxGallery, .nxActivityLog]
         case .customization:
-            [.nxThemesInstaller]
+            [.nxThemesInstaller, .bootLogos, .nxOvlloader, .teslaMenu, .ovlSysmodules, .sysClk]
         }
     }
 }
@@ -80,6 +80,9 @@ enum SwitchResource: String, CaseIterable {
     case teslaMenu
     case ovlSysmodules
     case sysClk
+    case hwflyToolbox
+    case picoflyToolbox
+    case dbi
 }
 
 extension SwitchResource {
@@ -110,6 +113,9 @@ extension SwitchResource {
         case .ovlSysmodules:        "ovlSysmodules"
         case .sysClk:               "sys-clk"
         case .linkalho:             "Linkalho"
+        case .picoflyToolbox:       "PicoFly Toolbox"
+        case .hwflyToolbox:         "HWFLY Toolbox"
+        case .dbi:                  "DBI"
         }
     }
 
@@ -261,6 +267,24 @@ extension SwitchResource {
                 repo: "linkalho",
                 assetPrefix: "linkalho-"
             )
+        case .picoflyToolbox:
+            .link(
+                URL(string: "https://gbatemp.net/attachments/picofly_toolbox_0-2-bin-pdf.363076/")!,
+                version: "2.0"
+            )
+        case .hwflyToolbox:
+            .github(
+                owner: "hwfly-nx",
+                repo: "hwfly-toolbox",
+                assetPrefix: "hwfly_toolbox.bin"
+            )
+
+        case .dbi:
+            .github(
+                owner: "rashevskyv",
+                repo: "dbi",
+                assetPrefix: "DBI.nro"
+            )
         }
     }
 
@@ -291,6 +315,9 @@ extension SwitchResource {
         case .ovlSysmodules:        "ovlSysmodules.ovl"
         case .sysClk:               "sys-clk.zip"
         case .linkalho:             "linkalho.zip"
+        case .picoflyToolbox:       "picofly_toolbox_0.2.bin"
+        case .hwflyToolbox:         "hwfly_toolbox.bin"
+        case .dbi:                  "DBI.nro"
         }
     }
 
@@ -334,7 +361,7 @@ extension SwitchResource {
 
         case .hbAppStore, .jksv, .ftpd,
               .nxThemesInstaller, .nxShell, .goldleaf,
-              .nxActivityLog:
+              .nxActivityLog, .dbi:
             [
                 .moveFile(from: assetFileName, to: "switch")
             ]
@@ -354,6 +381,11 @@ extension SwitchResource {
         case .linkalho:
             [
                 .moveFile(from: "linkalho.nro", to: "switch")
+            ]
+
+        case .picoflyToolbox, .hwflyToolbox:
+            [
+                .moveFile(from: assetFileName, to: "bootloader/payloads")
             ]
         }
     }
